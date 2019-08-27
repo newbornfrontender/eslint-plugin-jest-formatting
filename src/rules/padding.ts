@@ -21,8 +21,13 @@ export const enum StatementType {
   BeforeEachToken,
   DescribeToken,
   ExpectToken,
+  FdescribeToken,
+  FitToken,
   ItToken,
   TestToken,
+  XdescribeToken,
+  XitToken,
+  XtestToken,
 }
 
 type StatementTypes = StatementType | StatementType[];
@@ -80,8 +85,13 @@ const statementTesters: { [T in StatementType]: StatementTester } = {
   [StatementType.BeforeEachToken]: createTokenTester('beforeEach'),
   [StatementType.DescribeToken]: createTokenTester('describe'),
   [StatementType.ExpectToken]: createTokenTester('expect'),
+  [StatementType.FdescribeToken]: createTokenTester('fdescribe'),
+  [StatementType.FitToken]: createTokenTester('fit'),
   [StatementType.ItToken]: createTokenTester('it'),
   [StatementType.TestToken]: createTokenTester('test'),
+  [StatementType.XdescribeToken]: createTokenTester('xdescribe'),
+  [StatementType.XitToken]: createTokenTester('xit'),
+  [StatementType.XtestToken]: createTokenTester('xtest'),
 };
 
 /**
@@ -280,7 +290,7 @@ const createRuleListener = (
   };
 };
 
-export const createRule = (...configs: Config[]): Rule.RuleModule => ({
+export const createRule = (configs: Config[]): Rule.RuleModule => ({
   meta: {
     fixable: 'whitespace',
   },

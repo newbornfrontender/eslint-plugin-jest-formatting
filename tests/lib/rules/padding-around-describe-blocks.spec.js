@@ -39,7 +39,7 @@ describe('someText', () => {
   });
 });
 
-describe('someObject', () => {
+xdescribe('someObject', () => {
   // Another comment
   describe('some condition', () => {
     const anotherThing = 500;
@@ -49,7 +49,7 @@ describe('someObject', () => {
   });
 });
 
-describe('weird', () => {});
+fdescribe('weird', () => {});
 
 describe.skip('skip me', () => {});
 
@@ -77,14 +77,14 @@ describe('someText', () => {
   describe('some other condition', () => {
   });
 });
-describe('someObject', () => {
+xdescribe('someObject', () => {
   // Another comment
   describe('some condition', () => {
     const anotherThing = 500;
     describe('yet another condition', () => { // A comment over here!
     });
   });
-});describe('weird', () => {});
+});fdescribe('weird', () => {});
 describe.skip('skip me', () => {});
 const BOOP = "boop";
 describe

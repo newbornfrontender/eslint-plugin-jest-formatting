@@ -3,10 +3,15 @@
  * @author Dan
  */
 
-import { createRule, PaddingType, StatementType } from './rules/padding';
+import {
+  Config,
+  createRule,
+  PaddingType,
+  StatementType,
+} from './rules/padding';
 
-export const rules = {
-  'padding-around-after-all-blocks': createRule(
+const paddingConfigs: { [name: string]: Config[] } = {
+  afterAll: [
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
@@ -17,8 +22,8 @@ export const rules = {
       prevStatementType: StatementType.AfterAllToken,
       nextStatementType: StatementType.Any,
     },
-  ),
-  'padding-around-after-each-blocks': createRule(
+  ],
+  afterEach: [
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
@@ -29,8 +34,8 @@ export const rules = {
       prevStatementType: StatementType.AfterEachToken,
       nextStatementType: StatementType.Any,
     },
-  ),
-  'padding-around-before-all-blocks': createRule(
+  ],
+  beforeAll: [
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
@@ -41,8 +46,8 @@ export const rules = {
       prevStatementType: StatementType.BeforeAllToken,
       nextStatementType: StatementType.Any,
     },
-  ),
-  'padding-around-before-each-blocks': createRule(
+  ],
+  beforeEach: [
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
@@ -53,100 +58,145 @@ export const rules = {
       prevStatementType: StatementType.BeforeEachToken,
       nextStatementType: StatementType.Any,
     },
+  ],
+  describe: [
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: [
+        StatementType.DescribeToken,
+        StatementType.FdescribeToken,
+        StatementType.XdescribeToken,
+      ],
+    },
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: [
+        StatementType.DescribeToken,
+        StatementType.FdescribeToken,
+        StatementType.XdescribeToken,
+      ],
+      nextStatementType: StatementType.Any,
+    },
+  ],
+  expect: [
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: StatementType.ExpectToken,
+    },
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.ExpectToken,
+      nextStatementType: StatementType.Any,
+    },
+    {
+      paddingType: PaddingType.Any,
+      prevStatementType: StatementType.ExpectToken,
+      nextStatementType: StatementType.ExpectToken,
+    },
+  ],
+  test: [
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: [
+        StatementType.TestToken,
+        StatementType.ItToken,
+        StatementType.FitToken,
+        StatementType.XitToken,
+        StatementType.XtestToken,
+      ],
+    },
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: [
+        StatementType.TestToken,
+        StatementType.ItToken,
+        StatementType.FitToken,
+        StatementType.XitToken,
+        StatementType.XtestToken,
+      ],
+      nextStatementType: StatementType.Any,
+    },
+  ],
+};
+
+export const rules = {
+  'padding-around-after-all-blocks': createRule(paddingConfigs.afterAll),
+  'padding-around-after-each-blocks': createRule(paddingConfigs.afterEach),
+  'padding-around-before-all-blocks': createRule(paddingConfigs.beforeAll),
+  'padding-around-before-each-blocks': createRule(paddingConfigs.beforeEach),
+  'padding-around-describe-blocks': createRule(paddingConfigs.describe),
+  'padding-around-expect-groups': createRule(paddingConfigs.expect),
+  'padding-around-test-blocks': createRule(paddingConfigs.test),
+  'padding-around-all': createRule(
+    [].concat(Object.keys(paddingConfigs).map(k => paddingConfigs[k])),
   ),
-  'padding-around-describe-blocks': createRule(
+  // ===========================================================================
+  // DEPRECATED
+  'padding-before-after-all-blocks': createRule([
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: StatementType.AfterAllToken,
+    },
+  ]),
+  // DEPRECATED
+  'padding-before-after-each-blocks': createRule([
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: StatementType.AfterEachToken,
+    },
+  ]),
+  // DEPRECATED
+  'padding-before-before-all-blocks': createRule([
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: StatementType.BeforeAllToken,
+    },
+  ]),
+  // DEPRECATED
+  'padding-before-before-each-blocks': createRule([
+    {
+      paddingType: PaddingType.Always,
+      prevStatementType: StatementType.Any,
+      nextStatementType: StatementType.BeforeEachToken,
+    },
+  ]),
+  // DEPRECATED
+  'padding-before-describe-blocks': createRule([
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
       nextStatementType: StatementType.DescribeToken,
     },
-    {
-      paddingType: PaddingType.Always,
-      prevStatementType: StatementType.DescribeToken,
-      nextStatementType: StatementType.Any,
-    },
-  ),
-  'padding-around-expect-groups': createRule(
+  ]),
+  // DEPRECATED
+  'padding-before-expect-statements': createRule([
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
       nextStatementType: StatementType.ExpectToken,
     },
     {
-      paddingType: PaddingType.Always,
-      prevStatementType: StatementType.ExpectToken,
-      nextStatementType: StatementType.Any,
-    },
-    {
       paddingType: PaddingType.Any,
       prevStatementType: StatementType.ExpectToken,
       nextStatementType: StatementType.ExpectToken,
     },
-  ),
-  'padding-around-test-blocks': createRule(
+  ]),
+  // DEPRECATED
+  'padding-before-test-blocks': createRule([
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
       nextStatementType: [StatementType.TestToken, StatementType.ItToken],
     },
-    {
-      paddingType: PaddingType.Always,
-      prevStatementType: [StatementType.TestToken, StatementType.ItToken],
-      nextStatementType: StatementType.Any,
-    },
-  ),
-  // ===========================================================================
+  ]),
   // DEPRECATED
-  'padding-before-after-all-blocks': createRule({
-    paddingType: PaddingType.Always,
-    prevStatementType: StatementType.Any,
-    nextStatementType: StatementType.AfterAllToken,
-  }),
-  // DEPRECATED
-  'padding-before-after-each-blocks': createRule({
-    paddingType: PaddingType.Always,
-    prevStatementType: StatementType.Any,
-    nextStatementType: StatementType.AfterEachToken,
-  }),
-  // DEPRECATED
-  'padding-before-before-all-blocks': createRule({
-    paddingType: PaddingType.Always,
-    prevStatementType: StatementType.Any,
-    nextStatementType: StatementType.BeforeAllToken,
-  }),
-  // DEPRECATED
-  'padding-before-before-each-blocks': createRule({
-    paddingType: PaddingType.Always,
-    prevStatementType: StatementType.Any,
-    nextStatementType: StatementType.BeforeEachToken,
-  }),
-  // DEPRECATED
-  'padding-before-describe-blocks': createRule({
-    paddingType: PaddingType.Always,
-    prevStatementType: StatementType.Any,
-    nextStatementType: StatementType.DescribeToken,
-  }),
-  // DEPRECATED
-  'padding-before-expect-statements': createRule(
-    {
-      paddingType: PaddingType.Always,
-      prevStatementType: StatementType.Any,
-      nextStatementType: StatementType.ExpectToken,
-    },
-    {
-      paddingType: PaddingType.Any,
-      prevStatementType: StatementType.ExpectToken,
-      nextStatementType: StatementType.ExpectToken,
-    },
-  ),
-  // DEPRECATED
-  'padding-before-test-blocks': createRule({
-    paddingType: PaddingType.Always,
-    prevStatementType: StatementType.Any,
-    nextStatementType: [StatementType.TestToken, StatementType.ItToken],
-  }),
-  // DEPRECATED
-  'padding-before-all': createRule(
+  'padding-before-all': createRule([
     {
       paddingType: PaddingType.Always,
       prevStatementType: StatementType.Any,
@@ -166,7 +216,7 @@ export const rules = {
       prevStatementType: StatementType.ExpectToken,
       nextStatementType: StatementType.ExpectToken,
     },
-  ),
+  ]),
 };
 
 export const configs = {
